@@ -1,0 +1,9 @@
+[COMMAND]:      service.delete
+[PACKAGE]:      SERVICE
+[USE]:          dock -service delete
+
+[OUT]:          Delete Service File in /etc/systemd/system.
+
+[ACTIONS]:      rm /etc/systemd/system/$SN.service
+
+[NOTES]:        N/A

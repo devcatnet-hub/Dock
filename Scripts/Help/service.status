@@ -1,0 +1,9 @@
+[COMMAND]:      service.status
+[PACKAGE]:      SERVICE
+[USE]:          dock -service status
+
+[OUT]:          View Service Status.
+
+[ACTIONS]:      service $SN status
+
+[NOTES]:        N/A

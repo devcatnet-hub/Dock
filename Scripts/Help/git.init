@@ -1,0 +1,15 @@
+[COMMAND]:      git.init
+[PACKAGE]:      GIT
+[USE]:          dock -git init
+
+[OUT]:          Initial commit to the GIT repository on Bitbucket.
+
+[ACTIONS]:      git config --global credential.helper cache
+                git config --global --add safe.directory $(pwd)
+                git init
+                git add --all
+                git commit -m "Initial Commit"
+                git remote add origin $GIT_DIR
+                git push -u origin master
+
+[NOTES]:        *N/A

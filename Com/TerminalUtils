@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# [ ARGUMENTS ]
+VERB=$1
+ARG1=$2
+ARG2=$3
+ARG3=$4
+
+# [ COLORS ]
+ESC_SEQ="\x1b["
+COL_RESET=$ESC_SEQ"39;49;00m"
+
+COL_ACTION=$ESC_SEQ"0;1;97;48;5;36m"
+COL_INFO=$ESC_SEQ"0;1;97;48;5;26m"
+COL_ERROR=$ESC_SEQ"0;1;5;97;48;5;167m"
+
+# [ FUNCTIONS ]
+        TerminalMessage()
+        {
+        case "$1" in
+
+            ACTION)            
+                echo -e "$COL_ACTION $2 $COL_RESET"
+                echo
+                ;;  
+            INFO)            
+                echo -e "$COL_INFO $2 $COL_RESET"
+                echo
+                ;; 
+            ERROR)            
+                echo -e "$COL_ERROR $2 $COL_RESET"
+                echo
+                ;;  
+        esac
+        }
+
+        TerminalLine()
+        {
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "$1"
+        }
+
+# [ SELECTOR ]
+case "$VERB" in
+ 
+        TMessage)            
+            TerminalMessage $ARG1 "$ARG2"
+            ;;  
+        TLine)            
+            TerminalLine "$ARG1"
+            ;;  
+        THead)            
+            TerminalMessage $ARG1 "$ARG2"
+            ;; 
+ 
+esac

@@ -1,0 +1,9 @@
+[COMMAND]:      service.disable
+[PACKAGE]:      SERVICE
+[USE]:          dock -service disable
+
+[OUT]:          Disable Service.
+
+[ACTIONS]:      systemctl disable $SN.service 
+
+[NOTES]:        N/A

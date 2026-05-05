@@ -1,0 +1,10 @@
+
+Usage: TaskMaster VIEW [TYPE] {TASK}
+
+[TYPES]:
+
+Tasks           View the Tasks available.
+Task            View Items of a Task.
+ToDos           View the ToDo's available.
+ToDo            View Items of a ToDo.
+

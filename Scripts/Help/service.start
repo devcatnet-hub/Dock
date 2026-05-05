@@ -1,0 +1,9 @@
+[COMMAND]:      service.start
+[PACKAGE]:      SERVICE
+[USE]:          dock -service start
+
+[OUT]:          Start Service.
+
+[ACTIONS]:      service $SN start
+
+[NOTES]:        N/A

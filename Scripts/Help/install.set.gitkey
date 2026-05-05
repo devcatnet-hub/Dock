@@ -1,0 +1,10 @@
+[COMMAND]:      install.set.gitkey
+[PACKAGE]:      INSTALL
+[USE]:          dock -install set.gitkey
+
+[OUT]:          Set the correct permissions to the GIT key on the local computer.
+
+[ACTIONS]:      chmod 600 /mnt/Dock/Scripts/Keys/gitkey_rsa
+                chmod 644 /mnt/Dock/Scripts/Keys/gitkey_rsa.pub
+
+[NOTES]:        N/A

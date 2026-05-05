@@ -1,0 +1,9 @@
+[COMMAND]:      service.unmask
+[PACKAGE]:      SERVICE
+[USE]:          dock -service unmask
+
+[OUT]:          Unmask Service.
+
+[ACTIONS]:      systemctl unmask $SN
+
+[NOTES]:        N/A

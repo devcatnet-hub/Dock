@@ -1,0 +1,13 @@
+[COMMAND]:      git.update
+[PACKAGE]:      GIT
+[USE]:          dock -git update "{EX:Commit Name}"
+
+[OUT]:          Update the GIT repository in Bitbucket, requires a message at the end of the 
+                command to identify the commit.
+
+[ACTIONS]:      git add --all
+                git commit -m "$PARAM"
+                git push -u origin master
+                git status
+
+[NOTES]:        *N/A

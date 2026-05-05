@@ -1,0 +1,146 @@
+#!/bin/bash
+
+# HEAD:
+VER="v1.6.0 2022.01.09"
+echo -e "\n"
+TerminalUtils TMessage INFO "FFMpeg Script $VER | ID Process $$"
+
+# ARGUMENTS:
+# $1        Mode            $MODE
+# $2        Task Name       $TASK
+
+MODE=$1
+TASK=$2
+
+# GLOBAL VARS
+DIR=./OUT
+FULL_PATH=$(pwd)
+WHOIAM="[ PROD.FFMpeg | TASK: $TASK ]"
+TASK="<b>TASK</b> $FULL_PATH"
+COUNT=$(ls | wc -l )
+let J=0
+
+# FUNCTIONS
+
+    # PostConvert Function
+    PostConvert()
+    {
+        #$1 = Filena Original
+        #$2 = FFMPEG Exit Code
+        #$3 = Filename Without Extencion
+        #$4 = Number of File Finish    
+
+        # Get the Input and Output File Size
+        SIZEINPUT=$(stat -c %s "$1")
+        SIZEOUTPUT=$(stat -c %s "OUT/$3.mp4")    
+    
+        # Calculate the Input Size and the Output Size for Log File in MB
+        SIZEINPUT=$(($SIZEINPUT/1048576))
+        SIZEOUTPUT=$(($SIZEOUTPUT/1048576))
+
+        # Calculate the Gain or Loss in MB
+        GAIN=$(($SIZEINPUT-$SIZEOUTPUT))
+
+        # Set Size Message
+            if [ $SIZEOUTPUT -lt $SIZEINPUT ]; then    
+                SIZE="Input Size: [$SIZEINPUT MB] | Output Size: [$SIZEOUTPUT MB] | Gain: [$GAIN MB]"
+            else
+                SIZE="Input Size: [$SIZEINPUT MB] | Output Size: [$SIZEOUTPUT MB] | Loss: [$GAIN MB]"
+            fi
+
+
+        NAME=$1
+        CURRENT="[$4/$COUNT]"
+
+        # Set Exit Code to OK or Fail, Delete Original (if is OK) File and Send Result to Telegram
+            if [ $2 -eq 0 ]; then
+                EXIT='OK'
+                rm "$1"
+                mv "OUT/$3.mp4" "$3.mp4" 
+                chmod 777 "$3.mp4" 
+                TBots ACTION "$WHOIAM" "<b>$CURRENT</b> \"$1\" is <b>DONE: $SIZE</b>" -4263331110 Terminal
+            else
+                EXIT='FAIL'
+                TBots ERROR "$WHOIAM" "<b>$CURRENT</b> \"$1\" is <b>FAIL</b>" -4263331110 Terminal
+                chmod 777 "OUT/$3.mp4" #
+            fi
+
+        # Add Data to Log File
+        echo "\"$NAME\",$SIZEINPUT,$SIZEOUTPUT,$GAIN,$EXIT" >> OUT/Log.csv
+    }
+
+    # Duration Function
+    Duration()
+    {
+        DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$1")
+        DURATION=$(printf "%.0f" $DURATION)
+        DURATION=$(printf '%02d:%02d:%02d\n' $(($DURATION/3600)) $(($DURATION%3600/60)) $(($DURATION%60)))
+        echo $DURATION
+    }
+
+    ### [ BASENAME FUNC ] ###
+    BaseName()
+    {
+        FILENAME=$(basename "$1")   
+        FILENAME="${FILENAME%.*}"
+        echo $FILENAME
+    }
+
+# 
+
+#Send Task Init Message
+TBots INFO "$WHOIAM" "$TASK is STARTED <b>[$COUNT FILES]</b>" -4263331110 Terminal
+
+#Verify Output Directory
+if [ -d $DIR ]
+then
+    TBots ACTION "$WHOIAM" "OUTPUT Directory set to $FULL_PATH/OUT" -4263331110 Terminal
+else
+    mkdir OUT
+    TBots ACTION "$WHOIAM" "OUTPUT Directory set to $FULL_PATH/OUT" -4263331110 Terminal
+fi
+
+#Create Output Log File
+touch OUT/Log.csv
+echo "TASK:," >> OUT/Log.csv
+echo "$FULL_PATH ($COUNT Files)," >> OUT/Log.csv
+echo ",,,," >> OUT/Log.csv
+echo "File Name,Input Size (MB),Output Size (MB),Gain|Loss (MB),Exit" >> OUT/Log.csv
+TerminalUtils TMessage ACTION "[ACTION]: Init Log Success" 
+
+# MODE SELECTOR:
+case "$1" in
+
+    480p)
+        TBots INFO "$WHOIAM" "480p Profile is <b>SET</b>" -4263331110 Terminal
+
+        for i in *.*; do
+            filename=$(basename "$i")
+            filename="${filename%.*}"
+            let J++
+
+            DURATION=$(Duration "$i")
+
+            TBots ACTION "$WHOIAM" "<b>[$J/$COUNT] CONVERTING:</b> \"$i\" Duration: <b>$DURATION</b>" -4263331110 Terminal  
+
+            # ffmpeg -i "$i" -s hd480 -c:v libx264 -crf 23 -c:a aac -strict -2 "OUT/$filename.mp4"
+            ffmpeg -loglevel info -i "$i" -s hd480 -c:v libx264 -crf 23 -c:a aac -strict -2 "OUT/$filename.mp4"
+
+            PostConvert "$i" $? "$filename" $J
+        done
+
+        TBots ACTION "$WHOIAM" "TASK $FULL_PATH is <b>DONE</b>" -4263331110 Terminal          
+        mv "OUT/Log.csv" "Log.csv" 
+        chmod 777 "Log.csv"
+        rm -r OUT
+        ;; 
+
+    720p)
+        ;; 
+
+#   *) 
+#       echo "OPTION [ $1 ] NOT RECOGNIZED" 
+#       ;; 
+
+esac
+

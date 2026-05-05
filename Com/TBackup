@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#$1 = Folder to Backup
+
+CARPETA_ORIGEN=$1
+TOKEN_BOT="6341465106:AAFvLqQbAX9_tzEBuibSYua0adhtiFrS62s"
+CHAT_ID="-1001921440776"
+
+for archivo in "$CARPETA_ORIGEN"/*; do
+  if [ -f "$archivo" ]; then
+    curl -F "chat_id=$CHAT_ID" -F document=@"$archivo" "https://api.telegram.org/bot$TOKEN_BOT/sendDocument"
+  fi
+done

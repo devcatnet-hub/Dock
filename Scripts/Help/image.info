@@ -1,0 +1,11 @@
+[COMMAND]:      image.info
+[PACKAGE]:      IMAGE
+[USE]:          dock -image info
+
+[OUT]:          Shows all the information related to the parent image of the container of 
+                the current directory.
+
+[ACTIONS]:      INFO=$(docker image inspect -f "{{.$PARAM}}" $IMAGE_FULL_NAME)
+                echo $INFO
+
+[NOTES]:        More information available in the image.sh script.

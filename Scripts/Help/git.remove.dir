@@ -1,0 +1,9 @@
+[COMMAND]:      git.remove.dir
+[PACKAGE]:      GIT
+[USE]:          docker -git remove.dir
+
+[OUT]:          Delete the .git directory in the current directory.
+
+[ACTIONS]:      rm -r .git
+
+[NOTES]:        N/A

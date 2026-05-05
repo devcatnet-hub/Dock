@@ -1,0 +1,16 @@
+[COMMAND]:      production.samba.recycle
+[PACKAGE]:      PRODUCTION
+[USE]:          dock -production samba.recycle
+
+[OUT]:          Deletes Samba Recycle.
+
+[ACTIONS]:      cd /mnt/.recycle
+                echo "Disk space before empty samba recycle"
+                df -h /mnt
+                echo "Samba recycle content"
+                ls -a
+                rm -r * -I
+                echo "Disk space after empty samba recycle"
+                df -h /mnt
+
+[NOTES]:        N/A

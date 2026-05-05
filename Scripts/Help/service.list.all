@@ -1,0 +1,9 @@
+[COMMAND]:      service.list.all
+[PACKAGE]:      SERVICE
+[USE]:          dock -service list.all
+
+[OUT]:          List All Services.
+
+[ACTIONS]:      systemctl list-units -t service --all
+
+[NOTES]:        N/A

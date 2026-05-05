@@ -1,0 +1,10 @@
+
+Usage: TaskMaster ADD [TYPE] {TASK}
+
+[TYPES]:
+
+Dirs            Add a list of directories contained in the current directory to the Task.
+Dir             Add this Directory to Task.
+Item            Add Item Directory to Task.
+ToDo            Add ToDo Item to ToDo.
+

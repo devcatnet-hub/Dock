@@ -1,0 +1,112 @@
+#!/bin/bash
+
+### [ POSTCONVERT FUNC ] ###
+PostConvert()
+{
+    #$1 = Filena Original
+    #$2 = FFMPEG Exit Code
+    #$3 = Filename Without Extencion
+    #$4 = Number of File Finish
+
+    SIZEINPUT=$(stat -c %s "$1")
+    SIZEOUTPUT=$(stat -c %s "OUT/$3.mp4")
+
+    # Set Exit Code to OK or Fail, Delete Orginal File and Send Result to Telegram
+        if [ $2 -eq 0 ]; then
+            EXIT='OK'
+            rm "$1"
+            mv "OUT/$3.mp4" "$3.mp4" 
+            chmod 777 "$3.mp4" 
+            TBots ACTION "$WHOIAM" "\"$1\" is <b>DONE: [$4/$COUNT]</b>" 
+        else
+            EXIT='FAIL'
+            TBots ERROR "$WHOIAM" "\"$1\" is <b>FAIL: [$4/$COUNT]</b>" 
+            chmod 777 "OUT/$3.mp4" #
+        fi
+   
+    SIZEINPUT=$(($SIZEINPUT/1048576))
+    SIZEOUTPUT=$(($SIZEOUTPUT/1048576))
+    NAME=$1
+
+    echo "\"$NAME\",$SIZEINPUT,$SIZEOUTPUT,$EXIT" >> OUT/Log.csv
+}
+
+### [ FILE NAME] ###
+
+#FileName()
+#{
+#    filename=$(basename "$1")    
+#    extension="${filename##*.}"
+#    filename="${filename%.*}"
+#    echo "$filename"
+#}
+
+### [ FFMPEG ] ####################################################################################
+
+#Set Vars
+DIR=./OUT
+FULL_PATH=$(pwd)
+WHOIAM="<b>[ PRODUCTION.FFMpeg ]</b>"
+TASK="<b>TASK</b> $FULL_PATH"
+COUNT=$(ls | wc -l )
+let J=0
+
+#Send Task Init Message
+TBots INFO "$WHOIAM" "$TASK is STARTED <b>[$COUNT FILES]</b>"
+
+#Verify Output Directory
+if [ -d $DIR ]
+then
+    TBots ACTION "$WHOIAM" "OUTPUT Directory set to $FULL_PATH/OUT"
+else
+    mkdir OUT
+    TBots ACTION "$WHOIAM" "OUTPUT Directory set to $FULL_PATH/OUT"
+fi
+
+#Create Output Log File
+touch OUT/Log.csv
+echo "TASK:," >> OUT/Log.csv
+echo "$FULL_PATH ($COUNT Files)," >> OUT/Log.csv
+echo ",,," >> OUT/Log.csv
+echo "File Name,Input Size (MB),Output Size (MB),Exit" >> OUT/Log.csv
+
+while [ -n "$1" ]; do 
+
+    COMMAND=$1   
+ 
+    case "$COMMAND" in
+ 
+        480p)
+            TBots INFO "$WHOIAM" "480p Profile is <b>SET</b>"
+
+            for i in *.*; do
+                filename=$(basename "$i")    
+                extension="${filename##*.}"
+                filename="${filename%.*}"
+                #filename=FileName "$i"
+                let J++
+
+                TBots ACTION "$WHOIAM" "<b>[$J/$COUNT] CONVERTING:</b> \"$i\"" 
+                ffmpeg -i "$i" -s hd480 -c:v libx264 -crf 23 -c:a aac -strict -2 "OUT/$filename.mp4"
+                PostConvert "$i" $? "$filename" $J
+            done
+
+            TBots ACTION "$WHOIAM" "TASK $FULL_PATH is <b>DONE</b>"             
+            mv "OUT/Log.csv" "Log.csv" 
+            chmod 777 "Log.csv"
+            rm -r OUT
+            ;; 
+
+        720p)
+            ;; 
+    
+    #   *) 
+    #       echo "OPTION [ $1 ] NOT RECOGNIZED" 
+    #       ;; 
+ 
+    esac
+ 
+    shift
+ 
+done
+

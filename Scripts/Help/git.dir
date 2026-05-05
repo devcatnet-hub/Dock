@@ -1,0 +1,12 @@
+[COMMAND]:      git.dir
+[PACKAGE]:      GIT
+[USE]:          dock -git dir
+
+[OUT]:          Returns the Bitbucket Git address of the current directory stored in the .env file.
+                Return error if the current directory does not have an .env file.
+
+[ACTIONS]:      N/A*
+
+[NOTES]:        * For more information consult the script:
+
+                /mnt/Dock/Scripts/git.sh

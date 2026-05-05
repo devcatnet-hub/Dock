@@ -1,0 +1,8 @@
+
+Usage: TaskMaster CREATE [TYPE] {TASK}
+
+[TYPES]:
+
+Task            Create a Task file.
+ToDo            Create a ToDo file.
+

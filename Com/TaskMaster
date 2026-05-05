@@ -1,0 +1,467 @@
+#!/bin/bash
+
+
+# Arguments:
+# $1        Verb            $VERB
+# $2        Task File       $TASK
+# $3        Task Type       $TYPE
+
+#VERB=$1
+#TASK=$2
+#TYPE=$3
+#IFS="$(echo -e "\n\r")"
+#case "$VERB" in
+#    RUN.FFMpeg) 
+#        while true; do
+#            if [[ $(wc -l < /COM/PROD.Tasks/$TASK) -eq 0 ]]; then
+#               exit
+#            else
+#                FL=$(head -n 1 /COM/PROD.Tasks/$TASK)
+#                cd "$FL"
+#                /COM/PROD.FFMpeg/FFMpeg $TYPE $TASK
+#                cd /       
+#                sed -i '1d' /COM/PROD.Tasks/$TASK
+#            fi
+#        done
+#        ;;     
+#esac
+
+# HEAD:
+VER="v1.5.1 2022.01.08"
+echo -e "\n"
+TerminalUtils TMessage INFO "TaskMaster Script $VER | ID Process $$"
+
+# ARGUMENTS:
+# $1        Verb            $VERB
+# $2        Task Type       $TYPE
+# $3        Task Name       $TASK
+# $4        Item            $ITEM
+
+VERB=$1
+TYPE=$2
+TASK=$3
+ITEM=$4
+
+# GLOBAL VARS
+TASKPATH="/COM/PROD.Tasks/"
+TODOPATH="/COM/PROD.ToDo/"
+
+LSTASK=$(ls -1 $TASKPATH | nl -v 1 -w 4)
+LSTODO=$(ls -1 $TODOPATH | nl -v 1 -w 4)
+
+FFMPEGMODEPATH="/COM/PROD.FFMpeg/List.Mode"
+
+# CONFIGS:
+IFS="$(echo -e "\n\r")"
+
+# FUNCTIONS
+
+    # ViewTODOorTASK Function
+    ViewTODOorTASK()
+    {   
+
+        if [[ $2 = "Task" ]]; then
+            JOB="Task"
+        elif [[ $2 = "ToDo" ]]; then
+            JOB="ToDo"
+        elif [[ $1 = "Task" ]]; then
+            echo -e "No TASK specified!\n\nAvailable Tasks:\n$LSTASK\n"   
+            echo -e "Usage: TaskMaster VIEW Task [TaskName]\n"         
+            exit 0
+        elif [[ $1 = "ToDo" ]]; then
+            echo -e "No TODO specified!\n\nAvailable ToDo's:\n$LSTODO\n"    
+            echo -e "Usage: TaskMaster VIEW ToDo [ToDoName]\n"       
+            exit 0
+        fi
+
+        case "$JOB" in
+            Task)
+                if [[ -f $TASKPATH$1 ]]; then                    
+                    nl $TASKPATH$1
+                    echo -e "\n"
+                    exit 0
+                else
+                    echo -e "The TASK no Exist!\n\nAvailable Tasks:\n$LSTASK\n"
+                    echo -e "Usage: TaskMaster VIEW Task [TaskName]\n" 
+                    exit 0
+                fi
+                ;;
+            ToDo)
+                if [[ -f $TODOPATH$1 ]]; then
+                    nl $TODOPATH$1
+                    echo -e "\n"
+                    exit 0
+                else
+                    echo -e "The TODO no Exist!\n\nAvailable ToDo's:\n$LSTODO\n"
+                    echo -e "Usage: TaskMaster VIEW ToDo [ToDoName]\n" 
+                    exit 0
+                fi
+                ;;
+            
+        esac
+    }
+
+    # CreateTODOorTASK Function
+    CreateTODOorTASK()
+    { 
+        if [[ $2 = "Task" ]]; then
+            JOB="Task"
+        elif [[ $2 = "ToDo" ]]; then
+            JOB="ToDo"
+        elif [[ $1 = "Task" ]]; then
+            echo -e "No TASK Name specified!\n"
+            echo -e "Usage: TaskMaster CREATE Task [TaskName]\n" 
+            exit 0
+        elif [[ $1 = "ToDo" ]]; then
+            echo -e "No TODO Name specified!\n"      
+            echo -e "Usage: TaskMaster CREATE ToDo [ToDoName]\n"     
+            exit 0
+        fi
+
+        case "$JOB" in
+            Task)
+                if [[ -f $TASKPATH$1 ]]; then
+                    echo -e "The Task exists, you must specify a different name to create a new one\n"
+                    echo -e "Usage: TaskMaster CREATE Task [NEW!TaskName]\n" 
+                    exit 0
+                else
+                    echo EOF > $TASKPATH$TASK
+                    echo -e "Task: $TASK is Created\n"
+                    exit 0
+                fi
+                ;;
+            ToDo)
+                if [[ -f $TODOPATH$1 ]]; then
+                    echo -e "The ToDo exists, you must specify a different name to create a new one\n"                    
+                    echo -e "Usage: TaskMaster CREATE ToDo [NEW!ToDoName]\n" 
+                    exit 0
+                else
+                    echo EOF > $TODOPATH$TASK
+                    echo -e "ToDo: $TASK is Created\n"
+                    exit 0
+                fi
+                ;;
+            
+        esac
+
+    }
+
+    # AddDirsToTASK Function
+    AddDirsToTASK()
+    { 
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                RUTA=$(pwd)
+                for i in $(ls -r); do
+
+                    if [ -d "$i" ]; then
+                        sed -i "1i$RUTA/$i" $TASKPATH$1                                
+                    fi
+
+                done
+                echo -e "Task: $TASK now contains the following elements"
+                nl $TASKPATH$TASK
+                echo -e "\n"
+                exit 0
+            else
+                echo -e "A valid Task file is required to add the directories\n"                        
+                echo -e "Usage: TaskMaster ADD Dirs [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A Task name is required to add the directories\n"                        
+            echo -e "Usage: TaskMaster ADD Dirs [TaskName]\n"  
+            exit 0
+        fi
+        exit 0
+    }
+
+    # AddDirToTASK Function
+    AddDirToTASK()
+    {
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                RUTA=$(pwd)
+                nl $TASKPATH$1
+                echo -e "\nInput line to Add Dir\n"
+                read -s LINE
+                sed -i "$LINE i $RUTA" $TASKPATH$1
+                nl $TASKPATH$1
+                echo -e "\nThe current directory add to line $LINE\n"
+                exit 0
+            else
+                echo -e "A valid TASK file is required to add the current directory\n\nAvailable Tasks:\n$LSTASK\n"                        
+                echo -e "Usage: TaskMaster ADD Dir [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A TASK name is required to add the current directory\n\nAvailable Tasks:\n$LSTASK\n"                        
+            echo -e "Usage: TaskMaster ADD Dir [TaskName]\n"  
+            exit 0
+        fi
+        exit 0
+    }
+
+    # AddItemToTASK Function
+    AddItemToTASK()
+    {
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                nl $TASKPATH$1
+                echo -e "\nInput line to Add Item\n"
+                read -s LINE
+                sed -i "$LINE i $2" $TASKPATH$1
+                nl $TASKPATH$1
+                echo -e "\nThe Item add to line $LINE\n"
+                exit 0
+            else
+                echo -e "A valid TASK file is required to add Item\n\nAvailable Tasks:\n$LSTASK\n"                        
+                echo -e "Usage: TaskMaster ADD Item [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A valid TASK file is required to add Item\n\nAvailable Tasks:\n$LSTASK\n"                       
+            echo -e "Usage: TaskMaster ADD Dir [TaskName]\n"  
+            exit 0
+        fi
+        exit 0
+    }
+
+    # DeleteTASK Function
+    DeleteTASK()
+    {
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                echo -e "\nAre you sure you want to delete the following TASK: $1 (y/n)\n"
+                read -s DEL
+                if [[ $DEL = "y" ]]; then
+                    echo -e "Delete $1 Task File\n"
+                    rm $TASKPATH$1
+                fi
+                echo -e "\n"
+                exit 0
+            else
+                echo -e "A valid TASK file is required to delete Task File\n\nAvailable Tasks:\n$LSTASK\n"                        
+                echo -e "Usage: TaskMaster DELETE Task [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A TASK name is required to delete Task File\n\nAvailable Tasks:\n$LSTASK\n"                        
+            echo -e "Usage: TaskMaster DELETE Task [TaskName]\n"  
+            exit 0
+        fi
+        exit 0
+    }
+
+    # DeleteTASKItem Function
+    DeleteTASKItem()
+    {
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                nl $TASKPATH$1
+                echo -e "\nInput line to Delete Item\n"
+                read -s LINE
+                sed -i "$LINE d" $TASKPATH$1
+                nl $TASKPATH$1
+                echo -e "\nThe line $LINE was Deleted\n"
+                exit 0
+            else
+                echo -e "A valid TASK file is required to delete Task Item\n\nAvailable Tasks:\n$LSTASK\n"                        
+                echo -e "Usage: TaskMaster DELETE TaskItem [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A valid TASK file is required to delete Task Item\n\nAvailable Tasks:\n$LSTASK\n"                        
+            echo -e "Usage: TaskMaster DELETE TaskItem [TaskName]\n"   
+            exit 0
+        fi
+        exit 0
+    }
+
+    # RunFFMpeg Function
+    RunFFMpeg()
+    {
+        if [[ $1 ]]; then
+                        
+            if [[ -f $TASKPATH$1 ]]; then
+                nl $FFMPEGMODEPATH
+                echo -e "\nSelect a FFMpeg Mode\n"
+                read -s MODE
+                MODE=$(sed -n "$MODE p" $FFMPEGMODEPATH)
+
+                while true; do
+                    if [[ $(wc -l < $TASKPATH$1) -eq 0 ]]; then
+                        exit 0
+                    else
+                        FL=$(head -n 1 $TASKPATH$1)
+
+                        cd "$FL"
+                            /COM/PROD.FFMpeg/FFMpeg $MODE $1
+                        cd /       
+
+                        sed -i '1d' $TASKPATH$1
+                    fi
+                done
+
+                exit 0
+            else
+                echo -e "A valid TASK file is required to run Task FFMpeg\n\nAvailable Tasks:\n$LSTASK\n"                        
+                echo -e "Usage: TaskMaster RUN FFMpeg [TaskName]\n"  
+                exit 0
+            fi
+            exit 0
+
+        else 
+            echo -e "A valid TASK file is required to run Task FFMpeg\n\nAvailable Tasks:\n$LSTASK\n"                       
+            echo -e "Usage: TaskMaster RUN FFMpeg [TaskName]\n"   
+            exit 0
+        fi
+        exit 0
+    }
+
+# VERB SELECTOR:
+case "$VERB" in    
+
+    #CASE CREATE VERB
+    CREATE)
+            case "$TYPE" in
+                Task)
+                    CreateTODOorTASK $TASK Task
+                    ;;
+
+                ToDo)
+                    CreateTODOorTASK $TASK ToDo
+                    ;;
+
+                *) 
+                    echo "TYPE [ $TYPE ] NOT RECOGNIZED" 
+                    cat /COM/PROD.TaskMaster/Help.Type.Create
+                    exit 0
+                    ;; 
+
+            esac    
+        ;;
+
+    #CASE VIEW VERB
+    VIEW)
+            case "$TYPE" in
+
+                Tasks)
+                    echo -e "Available Tasks:\n$LSTASK\n"
+                    exit 0
+                    ;;
+
+                Task)
+                    ViewTODOorTASK $TASK Task
+                    exit 0
+                    ;;
+
+                ToDos)
+                    echo -e "Available ToDo's:\n$LSTODO\n"
+                    exit 0
+                    ;;
+
+                ToDo)
+                    ViewTODOorTASK $TASK ToDo
+                    exit 0
+                    ;;
+
+                *) 
+                    echo "TYPE [ $TYPE ] NOT RECOGNIZED" 
+                    cat /COM/PROD.TaskMaster/Help.Type.View
+                    exit 0
+                    ;; 
+
+            esac
+        ;;
+
+    #CASE ADD VERB
+    ADD)
+            case "$TYPE" in
+
+                Dirs)
+                    AddDirsToTASK $TASK
+                    exit 0
+                    ;;
+
+                Dir)
+                    AddDirToTASK $TASK
+                    exit 0
+                    ;; 
+
+                Item)
+                    AddItemToTASK $TASK $ITEM
+                    exit 0
+                    ;;   
+
+                *) 
+                    echo "TYPE [ $TYPE ] NOT RECOGNIZED" 
+                    cat /COM/PROD.TaskMaster/Help.Type.Add
+                    exit 0
+                    ;; 
+
+            esac
+        ;;
+
+    #CASE DELETE VERB
+    DELETE)  
+            case "$TYPE" in
+                Task)
+                    DeleteTASK $TASK
+                    exit 0
+                    ;;
+
+                TaskItem)
+                    DeleteTASKItem $TASK  
+                    exit 0
+                    ;;  
+
+                *) 
+                    echo "TYPE [ $TYPE ] NOT RECOGNIZED" 
+                    cat /COM/PROD.TaskMaster/Help.Type.Delete
+                    exit 0
+                    ;; 
+
+            esac
+        ;; 
+
+    #CASE RUN VERB
+    RUN)  
+            case "$TYPE" in
+                FFMpeg)
+                    RunFFMpeg $TASK
+                    exit 0
+                    ;;
+
+                *) 
+                    echo "TYPE [ $TYPE ] NOT RECOGNIZED" 
+                    cat /COM/PROD.TaskMaster/Help.Type.Run
+                    exit 0
+                    ;; 
+
+            esac
+        ;;     
+
+    #CASE NO VERB OR VERB NO DEFINED
+    *) 
+        echo "OPTION [ $VERB ] NOT RECOGNIZED" 
+        cat /COM/PROD.TaskMaster/Help.Verbs
+        exit 0
+        ;; 
+
+esac

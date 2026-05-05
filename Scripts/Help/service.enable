@@ -1,0 +1,9 @@
+[COMMAND]:      service.enable
+[PACKAGE]:      SERVICE
+[USE]:          dock -service create
+
+[OUT]:          Enable Service.
+
+[ACTIONS]:      systemctl enable $SN.service 
+
+[NOTES]:        N/A

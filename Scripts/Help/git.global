@@ -1,0 +1,11 @@
+[COMMAND]:      git.global
+[PACKAGE]:      GIT
+[USE]:          dock -git global
+
+[OUT]:          Add the email and user to the GIT config file.
+
+[ACTIONS]:      git config --global user.email "storage.catnet@gmail.com"
+                git config --global user.name "deathwalker66" 
+
+[NOTES]:        Necessary to make any commit, this command identifies the user and email registered 
+                in Bitbucked in the GIT configuration file.

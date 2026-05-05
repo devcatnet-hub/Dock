@@ -1,0 +1,60 @@
+#!/bin/bash
+
+#$1 = Verb Bot
+#$2 = APP Source
+#$3 = Message
+#$4 = Group ID
+#$5 = Terminal Option
+
+if [[ $1 = ACTION ]] || [[ $1 = INFO ]] || [[ $1 = ERROR ]]
+then
+    VERB=$1
+else
+    echo "TBots Need a Valid Verb ( ACTION | INFO | ERROR )"
+fi
+
+FROM=$2    
+MESSAGE=$3   
+
+if [ -z $4 ] 
+    then
+        GROUP_ID="-4263331110"
+    else
+        GROUP_ID="$4"
+fi
+
+MSG="<b>$FROM:</b> $MESSAGE"
+
+    Message=$MESSAGE
+    Message=${Message//"<b>"}
+    Message=${Message//"</b>"}
+
+if [ -z $5 ]
+    then
+        TerminalUtils TMessage $VERB "[$VERB]: No Terminal Message Setup."                
+    else
+        TerminalUtils TMessage $VERB "[$VERB]: $Message."
+fi
+ 
+    case "$VERB" in
+ 
+        ACTION)            
+            BOT_TOKEN="6690904005:AAFI8y9oZd2sC618dxB6FCY-9JEOIKW4gFU"
+            curl -s --data parse_mode='html' --data "text=$MSG" --data "chat_id=$GROUP_ID" 'https://api.telegram.org/bot'$BOT_TOKEN'/sendMessage' > /dev/null
+            ;; 
+
+        INFO)
+            BOT_TOKEN="5837349083:AAFzAJ7dhipZ5Ez3DzwBgX1sOThhOJ-Knx8"            
+            curl -s --data parse_mode='html' --data "text=$MSG" --data "chat_id=$GROUP_ID" 'https://api.telegram.org/bot'$BOT_TOKEN'/sendMessage' > /dev/null
+            ;; 
+    
+        ERROR)
+            BOT_TOKEN="5889299887:AAHL9JLzNhuroS6qsx4QS9-7tMlpr2gp4YQ"            
+            curl -s --data parse_mode='html' --data "text=$MSG" --data "chat_id=$GROUP_ID" 'https://api.telegram.org/bot'$BOT_TOKEN'/sendMessage' > /dev/null
+            ;;    
+                   
+    #   *) 
+    #       echo "OPTION [ $1 ] NOT RECOGNIZED" 
+    #       ;; 
+ 
+    esac

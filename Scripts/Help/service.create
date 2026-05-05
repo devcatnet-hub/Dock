@@ -1,0 +1,10 @@
+[COMMAND]:      service.create
+[PACKAGE]:      SERVICE
+[USE]:          dock -service create
+
+[OUT]:          Create Service File and Copy to /etc/systemd/system.
+
+[ACTIONS]:      cp /mnt/Dock/Scripts/template.service /etc/systemd/system/$SN.service                
+                sed -i "s/CONTAINER/$CONTAINER_NAME/g" /etc/systemd/system/$SN.service
+
+[NOTES]:        N/A

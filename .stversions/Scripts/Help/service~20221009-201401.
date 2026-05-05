@@ -1,0 +1,19 @@
+[PACKAGE]:      SERVICE
+
+[AVAILABLE COMMANDS]:          
+
+    -service create :       Create Service File and Copy to /etc/systemd/system.
+
+    -service delete :       Delete Service File in /etc/systemd/system.
+
+    -service disable :      Disable Service.
+
+    -service enable :       Enable Service.
+
+    -service list.active :  List Only Active Services.
+
+    -service list.all :       Delete the .git directory in the current directory.
+
+    -git rm :               Removes a remote from a local repository.
+
+

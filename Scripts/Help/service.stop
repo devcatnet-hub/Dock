@@ -1,0 +1,9 @@
+[COMMAND]:      service.stop
+[PACKAGE]:      SERVICE
+[USE]:          dock -service stop
+
+[OUT]:          Stop Service.
+
+[ACTIONS]:      service $SN stop
+
+[NOTES]:        N/A

@@ -1,0 +1,9 @@
+[COMMAND]:      install.set.pemkey
+[PACKAGE]:      INSTALL
+[USE]:          dock -install set.pemkey
+
+[OUT]:          Set the correct permissions to the PEM key on the local computer.
+
+[ACTIONS]:      chmod 600 /mnt/Dock/Scripts/Keys/docker.pem
+
+[NOTES]:        N/A

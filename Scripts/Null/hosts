@@ -1,0 +1,14 @@
+HOST                ADDRESS                         PORT        MAC
+
+CWBB-Alviss         186.151.223.73 [PUBLIC]         22
+                    192.168.0.251 [GT.GT:COM]       22
+
+CWD-Loki            192.168.0.30 [LOCAL]            22          E0:CB:4eE:28:BE:51              
+                    25.5.222.161 [REMOTE]           22
+
+CWS-Rig             192.168.0.101 [LOCAL]           22          00:1C:23:26:BB:D3
+                    25.45.170.188 [REMOTE]          22
+
+CWL-Sygin           192.168.0.31 [LOCAL]            22
+
+CWL-LadySif         162.168.0.32 [LOCAL]            22

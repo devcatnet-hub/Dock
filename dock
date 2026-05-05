@@ -1,0 +1,161 @@
+#!/bin/bash
+
+CFG_FILE=.env
+UNAME=$(uname -v)
+
+### [ CONFIG FILE ] #####################################################################################
+# SOURCE: https://poesiabinaria.net/2018/02/leer-ficheros-configuracion-ini-desde-scripts-bash/
+
+function ReadIni()
+{
+    if [ -z $2 ]; then
+        awk -F "=" '/'"$1"'/ {print $2}' "$CFG_FILE"
+    else
+        awk -F "=" '/'"$1"'/ {print $2}' "$2"
+    fi
+} 
+
+### [ OPTIONS ] #########################################################################################
+
+# SOURCE: https://likegeeks.com/es/scripting-de-bash-parametros-y-opciones/
+ 
+while [ -n "$1" ]; do 
+ 
+    case "$1" in    
+
+        -bash)   
+            IMAGE_FULL_NAME=$(ReadIni "IMAGE_FULL_NAME")      
+            docker run -it --rm $IMAGE_FULL_NAME bash 
+            ;;
+
+        -login)      
+            docker login 
+            ;;
+ 
+        -info)      
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                IMAGE_NAME=$(ReadIni "IMAGE_NAME")
+                SSH_PORT=$(ReadIni "SSH_PORT")
+                IMAGE_FULL_NAME=$(ReadIni "IMAGE_FULL_NAME")
+                echo "Image Name: $IMAGE_NAME" 
+                echo "Image Full Name: $IMAGE_FULL_NAME" 
+                echo "Container Name : $CONTAINER_NAME"
+                echo "SSH Port: $SSH_PORT"
+                echo "Current Dir: $(pwd)"
+                ;;
+    
+        -start) 
+                docker-compose up -d 
+                ;; 
+
+        -stop) 
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                docker stop $CONTAINER_NAME 
+                ;; 
+
+        -restart)   
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                docker stop $CONTAINER_NAME && docker-compose up -d 
+                ;;
+
+        -rebuild)
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                docker stop $CONTAINER_NAME && docker container rm $CONTAINER_NAME && docker-compose up -d 
+                ;;
+
+        -touch)   
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                docker-compose up --no-start 
+                ;;
+
+        -del) 
+                CONTAINER_NAME=$(ReadIni "CONTAINER_NAME")
+                docker container rm $CONTAINER_NAME 
+                ;; 
+            
+        -debug) 
+                docker-compose up 
+                ;;
+
+        -chmod) 
+                dir=$(pwd);
+                chmod -R 777 $dir
+                chmod 600 /mnt/Dock/Scripts/Keys/docker.pem
+                chmod 600 /mnt/Dock/Scripts/Keys/docker.pem.pub
+                chmod 600 /mnt/Dock/Scripts/Keys/gitkey_rsa
+                chmod 644 /mnt/Dock/Scripts/Keys/gitkey_rsa.pub
+                ;;
+
+        -container | -c)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/container.sh "$COMMAND" "$PARAM" 
+                ;; 
+
+        -image | -i)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/image.sh "$COMMAND" "$PARAM" 
+                ;; 
+
+        -git | -g)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/git.sh "$COMMAND" "$PARAM" 
+                ;; 
+
+        -help | -h)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/help.sh "$COMMAND" "$PARAM" 
+                ;;
+
+        -service | -s)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/service.sh "$COMMAND" "$PARAM"
+                ;;
+
+        -ssh)
+                SSH_PORT=$(ReadIni "SSH_PORT")
+                ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[localhost]:$SSH_PORT"
+                clear
+                ssh -q -o StrictHostKeyChecking=no -i /mnt/Dock/Scripts/Keys/docker.pem root@localhost -p $SSH_PORT
+                #-q flag to disable warnings/diagnostics (but not errors)
+                ;;   
+
+        -install | -in)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/install.sh "$COMMAND" "$PARAM"
+                ;;    
+
+        -production | -prod)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/production.sh "$COMMAND" "$PARAM"
+                ;;  
+
+        -utils | -u)
+                COMMAND="$2"
+                PARAM="$3"
+                /mnt/Dock/Scripts/utils.sh "$COMMAND" "$PARAM"
+                ;; 
+
+        -mnt)
+                chmod -R 777 /mnt                
+                /mnt/Dock/dock -install set.pemkey
+                ;;      
+                    
+
+        -test)
+                echo $UNAME
+                ;;
+    
+        #*) echo "Option $1 not recognized" ;; 
+ 
+    esac
+ 
+    shift
+ 
+done

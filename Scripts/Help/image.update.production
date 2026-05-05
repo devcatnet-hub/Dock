@@ -1,0 +1,19 @@
+[COMMAND]:      image.update.production
+[PACKAGE]:      IMAGE
+[USE]:          dock -image update.production
+
+[OUT]:          Stops the container service in the current directory (production containers only), 
+                disables the service, deletes the container's parent image, starts the container 
+                again forcing a new parent image to be downloaded, enables the service again, 
+                starts it, and returns the state of it.
+
+[ACTIONS]:      dock -service stop
+                dock -service disable
+                dock -stop -del
+                docker image rm $IMAGE_FULL_NAME
+                dock -start
+                dock -service enable
+                dock -service start
+                dock -service status
+
+[NOTES]:        More information available in the image.sh script.

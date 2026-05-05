@@ -1,0 +1,9 @@
+[COMMAND]:      production.rclone.clean.log
+[PACKAGE]:      PRODUCTION
+[USE]:          dock -production rclone.clean.log
+
+[OUT]:          Clean RClone Log.
+
+[ACTIONS]:      cat /dev/null > /mnt/CWDIR-PRODUCTION/GTGTCOM/RClone/LOG/cron.log
+
+[NOTES]:        N/A

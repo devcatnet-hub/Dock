@@ -1,0 +1,9 @@
+[COMMAND]:      install.info.path
+[PACKAGE]:      INSTALL
+[USE]:          dock -install info.path
+
+[OUT]:          Return information about the current user's PATH.
+
+[ACTIONS]:      echo $PATH
+
+[NOTES]:        N/A

@@ -1,0 +1,11 @@
+
+Usage: TaskMaster [OPTION] [TYPE] {TASK}
+
+[OPTIONS]:
+
+CREATE          Create a task.
+VIEW            Show Information (Tasks, Task, ToDo's, ToDo).
+ADD             Add items to a Task or ToDo.
+RUN             Run a Task.
+DELETE          Delete a Task, Items or ToDo.
+

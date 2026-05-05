@@ -1,0 +1,9 @@
+[COMMAND]:      service.list.active
+[PACKAGE]:      SERVICE
+[USE]:          dock -service list.active
+
+[OUT]:          List Only Active Services.
+
+[ACTIONS]:      systemctl list-units -t service
+
+[NOTES]:        N/A

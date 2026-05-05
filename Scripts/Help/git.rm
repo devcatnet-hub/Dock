@@ -1,0 +1,12 @@
+[COMMAND]:      git.rm
+[PACKAGE]:      GIT
+[USE]:          dock -git rm
+
+[OUT]:          Removes a remote from a local repository.
+
+[ACTIONS]:      git remote rm origin
+
+[NOTES]:        Upon executing this command, the reference remotes origin will no longer point to the 
+                remote repository. It’s worth noting this does not delete your remote repository or affect 
+                it in any way. All it means is that your local copy of a repository is no longer associated 
+                with a particular remote. 

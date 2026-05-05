@@ -1,0 +1,10 @@
+[COMMAND]:      service.restart
+[PACKAGE]:      SERVICE
+[USE]:          dock -service restart
+
+[OUT]:          Restart Service.
+
+[ACTIONS]:      service $SN stop
+                service $SN start
+
+[NOTES]:        N/A

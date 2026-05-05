@@ -1,0 +1,9 @@
+[COMMAND]:      image.delete
+[PACKAGE]:      IMAGE
+[USE]:          dock -image delete
+
+[OUT]:          Delete the parent image of the container from the current directory.
+
+[ACTIONS]:      docker image rm $IMAGE_FULL_NAME
+
+[NOTES]:        More information available in the image.sh script.

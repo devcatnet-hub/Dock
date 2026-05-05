@@ -1,0 +1,11 @@
+[COMMAND]:      git.set.url.ssh
+[PACKAGE]:      GIT
+[USE]:          dock -git set.url.ssh
+
+[OUT]:          Change access to the Git directory in BitBucket from https to ssh.
+
+[ACTIONS]:      GIT_WORKSPACE_ID=$(ReadIni "GIT_WORKSPACE_ID")  
+                GIT_REPO_NAME=$(ReadIni "GIT_REPO_NAME")      
+                git remote set-url origin git@bitbucket.org:$GIT_WORKSPACE_ID/$GIT_REPO_NAME
+
+[NOTES]:        N/A

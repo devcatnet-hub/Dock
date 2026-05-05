@@ -1,0 +1,10 @@
+[COMMAND]:      git.safe.directory
+[PACKAGE]:      GIT
+[USE]:          dock -git safe.directory
+
+[OUT]:          Add the repository directory as a safe directory with the recommended command.
+
+[ACTIONS]:      dir=$(pwd);
+                git config --global --add safe.directory $dir
+                
+[NOTES]:        N/A

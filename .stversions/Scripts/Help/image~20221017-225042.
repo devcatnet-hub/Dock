@@ -1,0 +1,21 @@
+[PACKAGE]:      IMAGE
+
+[AVAILABLE COMMANDS]:          
+
+    -image info :                   Shows all the information related to the parent image of the container of 
+                                    the current directory.
+
+    -image make :                   Build Image based in the dockerfile of the current Container folder.
+
+    -image delete :                 Delete the parent image of the container from the current directory.
+
+    -image push :                   Upload to Docker Hub the parent image of the container in this directory.
+
+    -image update.dev :             Stops the container in the current directory, deletes the parent image, 
+                                    and starts the container again.
+
+    -image update.production  :     Stops the container service in the current directory (production 
+                                    ontainers only), disables the service, deletes the container's 
+                                    parent image, starts the container again forcing a new parent
+                                    image to be downloaded, enables the service again, starts it, 
+                                    and returns the state of it.

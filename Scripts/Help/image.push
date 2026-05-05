@@ -1,0 +1,9 @@
+[COMMAND]:      image.push
+[PACKAGE]:      IMAGE
+[USE]:          dock -image push
+
+[OUT]:          Upload to Docker Hub the parent image of the container in this directory.
+
+[ACTIONS]:      docker push "$IMAGE_FULL_NAME:latest"
+
+[NOTES]:        More information available in the image.sh script.

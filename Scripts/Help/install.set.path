@@ -1,0 +1,11 @@
+[COMMAND]:      install.set.path
+[PACKAGE]:      INSTALL
+[USE]:          dock -install set.path
+
+[OUT]:          Add the PATH of the script to the current user.
+
+[ACTIONS]:      echo "export PATH=$PATH:/mnt/Dock" >>  ~/.bashrc
+
+[NOTES]:        It is necessary to close the session or execute the following command for it to take effect:
+                
+                . ~/.bashrc

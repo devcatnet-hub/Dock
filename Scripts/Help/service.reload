@@ -1,0 +1,9 @@
+[COMMAND]:      service.reload
+[PACKAGE]:      SERVICE
+[USE]:          dock -service reload
+
+[OUT]:          Change Service Configuration Without Restart.
+
+[ACTIONS]:      systemctl reload $SN
+
+[NOTES]:        N/A

@@ -1,0 +1,15 @@
+[COMMAND]:      service.new.production
+[PACKAGE]:      SERVICE
+[USE]:          dock -service new.production
+
+[OUT]:          Turn on a container, create a new service, enable the service, 
+                start the service, and display status.
+
+[ACTIONS]:      docker-compose up -d 
+                cp /mnt/Dock/Scripts/template.service /etc/systemd/system/$SN.service                
+                sed -i "s/CONTAINER/$CONTAINER_NAME/g" /etc/systemd/system/$SN.service
+                systemctl enable $SN.service  
+                service $SN start
+                service $SN status
+
+[NOTES]:        N/A

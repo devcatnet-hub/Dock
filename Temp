@@ -1,0 +1,6 @@
+mkdir /opt/odrive
+mkdir /opt/odrive/bin
+curl -L "https://dl.odrive.com/odriveagent-lnx-64" | tar -xvzf- -C /opt/odrive/bin
+curl -L "https://dl.odrive.com/odrivecli-lnx-64" | tar -xvzf- -C /opt/odrive/bin
+
+nohup "/opt/odrive/bin/odriveagent" > /dev/null 2>&1 &

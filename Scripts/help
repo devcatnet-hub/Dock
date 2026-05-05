@@ -1,0 +1,52 @@
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[MISCELLANIUS]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+ring_=\n\e[101m [DOCK SCRIPT]\e[0m \e[91m
+ring_=\n One Script to Rule them All, 
+ring_=\n One Script to Find Them, 
+ring_=\n One Script to Bring them All and In the Matrix bind Them. \n\e[0m
+
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[HELP]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+help_help=\n\e[104m[HELP COMMANDS]\e[0m \n
+
+help_=\n [HELP] 
+help_=\n [E]:Show all Help \n
+
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[CONTAINER INTERNAL COMMANDS]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+container_=\n\e[104m[CONTAINER INTERNAL COMMANDS]\e[0m \n
+
+container_passwd=\n [CONTAINER PASSWORD] 
+container_passwd=\n [E]: Change Password of the Container of the current folder 
+container_passwd=\n [S]: docker container exec -it [CONTAINER NAME] passwd \n
+
+container_run=\n [CONTAINER RUN] 
+container_run=\n [E]: Run Internal Command in the Container of the current folder 
+container_run=\n [S]: docker container exec -it [CONTAINER NAME] [COMMAND] 
+container_run=\n [X]: dock -container run ls \n
+
+container_cmd=\n [CONTAINER CMD] 
+container_cmd=\n [E]: Run /COM/command.com rutine in the Container of the current folder
+container_cmd=\n [S]: docker container exec -it [CONTAINER NAME] "/COM/command.com" [RUTINE] 
+container_cmd=\n [X]: dock -container cmd rutine \n
+
+container_upgrade=\n [CONTAINER UPGRADE] 
+container_upgrade=\n [E]: Execute a Package Upgrade in  docker container exec -it [CONTAINER NAME] upgrade \n
+
+container_add=\n [CONTAINER ADD] 
+container_add=\n [E]: Add Package to the Container of the current folder
+container_add=\n [S]: docker container exec -it [CONTAINER NAME] apk --no-cache add [PACKAGE] 
+container_add=\n [E]: dock -container add tzdata \n
+
+container_del=\n [CONTAINER DEL] 
+container_del=\n [E]: Remove Package from the Container of the current folder
+container_del=\n [S]: docker container exec -it [CONTAINER NAME] apk del [PACKAGE] 
+container_del=\n [E]: dock -container del tzdata \n
+
+container_bash=\n [CONTAINER BASH] 
+container_bash=\n [E]: Run Bash in the Container of the current folder
+container_bash=\n [S]: docker container exec -it [CONTAINER NAME] /bin/bash \n
+
+container_get=\n [CONTAINER GET] 
+container_get=\n [E]: Get a file from the Container of the current folder to TMP folder
+container_get=\n [S]: docker cp [CONTAINER NAME]:[FILENAME] ./TMP/[FILENAME] \n

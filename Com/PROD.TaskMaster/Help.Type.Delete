@@ -1,0 +1,10 @@
+
+Usage: TaskMaster DELETE [TYPE] {TASK}
+
+[TYPES]:
+
+Task            Delete a Task File.
+TaskItem        Delete Task Item.
+ToDo            Delete a ToDo File.
+ToDoItems       Delete ToDo Items.
+

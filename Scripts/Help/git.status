@@ -1,0 +1,9 @@
+[COMMAND]:      git.status
+[PACKAGE]:      GIT
+[USE]:          dock -git status
+
+[OUT]:          Returns the status of the GIT repository in Bitbucket.
+
+[ACTIONS]:      git status
+
+[NOTES]:        N/A

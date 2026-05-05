@@ -1,0 +1,12 @@
+[COMMAND]:      image.update.dev
+[PACKAGE]:      IMAGE
+[USE]:          dock -image update.dev
+
+[OUT]:          Stops the container in the current directory, deletes the parent image, 
+                and starts the container again.
+
+[ACTIONS]:      dock -stop -del
+                docker image rm $IMAGE_FULL_NAME
+                dock -start
+
+[NOTES]:        More information available in the image.sh script.

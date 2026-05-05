@@ -1,0 +1,27 @@
+[PACKAGE]:      GIT
+
+[ALIAS]:        -git | -g
+
+[AVAILABLE COMMANDS]:          
+
+    -git dir :              Returns the Bitbucket Git address of the current directory stored in the .env file.
+                            Return error if the current directory does not have an .env file.
+
+    -git global :           Add the email and user to the GIT config file.
+
+    -git init :             Initial commit to the GIT repository on Bitbucket.
+
+    -git update :           Update the GIT repository in Bitbucket, requires a message at the end of the 
+                            command to identify the commit.
+
+    -git cache.password :   Adds the identity of the Bitbucket user to the cache.
+
+    -git remove.dir :       Delete the .git directory in the current directory.
+
+    -git rm :               Removes a remote from a local repository.
+
+    -git safe.directory:    Add the repository directory as a safe directory with the recommended command.
+
+    -git set.url.https:     
+
+

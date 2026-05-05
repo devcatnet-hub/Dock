@@ -1,0 +1,10 @@
+[COMMAND]:      git.set.url.https
+[PACKAGE]:      GIT
+[USE]:          dock -git set.url.https
+
+[OUT]:          Change access to the Git directory in BitBucket from ssh to https.
+
+[ACTIONS]:      GIT_DIR=$(ReadIni "GIT_DIR")   
+                git remote set-url origin $GIT_DIR
+
+[NOTES]:        N/A

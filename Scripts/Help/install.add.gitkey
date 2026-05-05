@@ -1,0 +1,13 @@
+[COMMAND]:      install.add.gitkey
+[PACKAGE]:      INSTALL
+[USE]:          dock -install add.gitkey
+
+[OUT]:          Add the private key to the ssh-agent.
+
+[ACTIONS]:      eval `ssh-agent`
+                echo $SSH_AUTH_SOCK
+                ssh-add /mnt/Dock/Scripts/Keys/gitkey_rsa
+                ssh-add -l
+                ssh -T git@bitbucket.org
+
+[NOTES]:        N/A
